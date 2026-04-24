@@ -5,7 +5,7 @@ class _RichPrint:
     '''
     Class that handles execution and detection of values and formatted values
 
-    possible kwargs: sorting, indentation, encoding, showonly, switch_rows, startat (0 or 1 indexing)
+    possible kwargs: sorting, encoding, showonly, switch_rows, startat (0 or 1 indexing), encoding errors, nullstr, truncate, maxlength, show_indices
     '''
     def __call__(self, value, **kwargs):
         '''Is called when user types in simply rprint(value)
