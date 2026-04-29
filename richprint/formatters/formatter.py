@@ -22,7 +22,9 @@ def format_list(value: list, **kwargs):
     show_indices: bool = kwargs.get('show_indices', True)
     truncate: int = kwargs.get('truncate', 100)
     maxlength: int = kwargs.get('maxlength', 50)
+    groupby: str = kwargs.get('groupby', "type")
     
+    print("")
     print(f"List/tuple: ")
     print("")
     if sort:
@@ -32,11 +34,12 @@ def format_list(value: list, **kwargs):
         if target_type is None:
             raise ValueError(f"Unknown type '{showonly}'. Valid options: {list(TYPE_MAP.keys())}")
         value = [item for item in value if isinstance(item, target_type)]
+    if groupby.lower() == "type":
+        value.sort(key=sort_fn)
     if maxlength:
-        excess = len(value) - maxlength
-        value = value[:maxlength]
-        #value.append("... ({} more)".format(excess))
-        
+        if maxlength < len(value):
+            excess = len(value) - maxlength
+            value = value[:maxlength]
     if truncate:
         for index, item in enumerate(value):
             if len(str(item)) > truncate and item not in [True, False, None]:
@@ -57,10 +60,17 @@ def format_list(value: list, **kwargs):
         for index, item in enumerate(value, start=startat):
             print("    {}".format(item))
     
-    if excess:
-        print("")
-        print("... ({} more)".format(excess))
+    try:
+        if excess:
+            print("")
+            print("... ({} more)".format(excess))
+    except UnboundLocalError:
+        pass
 
+    print("")
+
+def sort_fn(e):
+    return str(type(e))
 '''
 DICTIONARY FORMATTING
 '''
@@ -84,4 +94,4 @@ TESTING
 '''
 if __name__ == '__main__':
     test = ['āaaaaaaaa', 'ęweeeeeeeeeee', 'žaaaaaaa', 'čw', 1, 2456543521321, None]
-    format_list(test, maxlength=3)
+    format_list(test, groupby="type")
