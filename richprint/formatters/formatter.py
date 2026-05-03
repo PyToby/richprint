@@ -58,12 +58,12 @@ def format_list(value: list, **kwargs):
             print("    item #{}     {}".format(index, item))
     else:
         for index, item in enumerate(value, start=startat):
-            print("    {}".format(item))
+            print(f"    {item}")
     
     try:
         if excess:
             print("")
-            print("... ({} more)".format(excess))
+            print(f"... ({excess} more)")
     except UnboundLocalError:
         pass
 
@@ -81,7 +81,7 @@ def format_dict(value, **kwargs):
 PRIMITIVE FORMATTING
 '''
 def format_primitive(value, **kwargs):
-    pass
+    print("({}): {}".format(type(value), value))
 
 '''
 TABLE FORMATTING
@@ -93,5 +93,8 @@ def format_table(value, **kwargs):
 TESTING
 '''
 if __name__ == '__main__':
-    test = ['āaaaaaaaa', 'ęweeeeeeeeeee', 'žaaaaaaa', 'čw', 1, 2456543521321, None]
-    format_list(test, groupby="type")
+    #test = ['āaaaaaaaa', 'ęweeeeeeeeeee', 'žaaaaaaa', 'čw', 1, 2456543521321, None]
+    #format_list(test, groupby="type")
+
+    text = "Welcome to the new dark ages, I hope you're living right."
+    format_primitive(text)
