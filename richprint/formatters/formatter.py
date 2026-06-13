@@ -47,7 +47,7 @@ def format_list(value: list, **kwargs):
                 value[index] = "".join(chars_split[0: truncate]) + "..."
     if encoding:
         try:
-            value = [item.encode(encoding, errors=errors).decode(encoding) if isinstance(item, str) else item for item in value]
+            value = [item.encode(encoding, errors=errors or "strict").decode(encoding) if isinstance(item, str) else item for item in value]
         except LookupError:
             raise ValueError(f"Unknown encoding '{encoding}' or error '{errors}'. Please use an existing encoding.")
     if nullstr:
@@ -71,7 +71,7 @@ def format_list(value: list, **kwargs):
 
 def sort_fn(e):
     return str(type(e))
-'''
+    '''
 DICTIONARY FORMATTING
 '''
 def format_dict(value, **kwargs):
@@ -81,7 +81,34 @@ def format_dict(value, **kwargs):
 PRIMITIVE FORMATTING
 '''
 def format_primitive(value, **kwargs):
+    nullstr: str = kwargs.get('nullstr', None)
+    encoding: str = kwargs.get('encoding', None)
+    errors: str = kwargs.get('errors', None)
+    truncate: int = kwargs.get('truncate', None)
+    prefix: str = kwargs.get('prefix')
+    suffix: str = kwargs.get('suffix')
+
+    if nullstr and value == None:
+        value = nullstr
+    if encoding:
+        try:
+            value = value.encode(encoding=encoding, errors=errors or "strict").decode(encoding=encoding) if isinstance(value, str) else value
+        except LookupError:
+            raise ValueError(f"Unknown encoding '{encoding}' or error '{errors}'. Please use an existing encoding.") 
+        except UnicodeEncodeError as e:
+            raise ValueError(f"Could not encode value with encoding '{encoding}': {e}")
+    if truncate:
+        if len(str(value)) > truncate and type(value) != bool and value != None:
+            value = value[:truncate] + "..."
+    if prefix:
+        value = prefix + value
+    if suffix:
+        value = value + suffix
+        
+
+    print('')
     print("({}): {}".format(type(value), value))
+    print('')
 
 '''
 TABLE FORMATTING
@@ -93,8 +120,8 @@ def format_table(value, **kwargs):
 TESTING
 '''
 if __name__ == '__main__':
-    #test = ['āaaaaaaaa', 'ęweeeeeeeeeee', 'žaaaaaaa', 'čw', 1, 2456543521321, None]
+    test = ['āaaaaaaaa', 'ęweeeeeeeeeee', 'žaaaaaaa', 'čw', 1, 2456543521321, None]
     #format_list(test, groupby="type")
 
     text = "Welcome to the new dark ages, I hope you're living right."
-    format_primitive(text)
+    format_primitive(text, prefix="Yum! ", suffix=" YUM!")
