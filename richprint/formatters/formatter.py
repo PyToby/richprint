@@ -75,7 +75,18 @@ def sort_fn(e):
 DICTIONARY FORMATTING
 '''
 def format_dict(value, **kwargs):
-    pass
+    maxlength: int = kwargs.get('maxlength', 50)
+    nullstr: str = kwargs.get('nullstr', None)
+    #encoding: str = kwargs.get('encoding', None)
+    #errors: str = kwargs.get('errors', None)
+    truncate: int = kwargs.get('truncate', None)
+    sort: bool = kwargs.get('sort')
+    sort_by: str = kwargs.get('sort_by')
+    keys: bool = kwargs.get('keys')
+    exclude: bool = kwargs.get('exclude')
+    flatten: bool = kwargs.get('flatten')
+    sort: str = kwargs.get('sort')
+
 
 '''
 PRIMITIVE FORMATTING
