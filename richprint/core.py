@@ -1,4 +1,4 @@
-from richprint.formatters.formatter import format_list, format_dict, format_primitive, format_table
+from richprint.formatters.formatter import format_list, format_dict, format_primitive
 
 
 class _RichPrint:
@@ -29,10 +29,6 @@ class _RichPrint:
         if isinstance(value, (list, tuple)): return format_list
         if isinstance(value, dict): return format_dict
         if isinstance(value, (str, int, bool, None)): return format_primitive
-    
-    def table(self, value, **kwargs):
-        output = format_table(value, **kwargs)
-        print(output) 
 
     def configure(self, **kwargs): pass
 
