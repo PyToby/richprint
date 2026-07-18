@@ -3,9 +3,11 @@ from richprint.formatters.formatter import format_list, format_dict, format_prim
 
 class _RichPrint:
     '''
-    Class that handles execution and detection of values and formatted values
-
-    possible kwargs: sorting, encoding, showonly, switch_rows, startat (0 or 1 indexing), encoding errors, nullstr, truncate, maxlength, show_indices, groupby
+    Class that handles execution and detection of values and formatted values.\n
+    
+    Possible kwargs for primitive formatting: nullstr, encoding, errors, truncate, prefix, suffix \n
+    Possible kwargs for list formatting: sorting, encoding, showonly, switch_rows, startat (0 or 1 indexing), encoding errors, nullstr, truncate, maxlength, show_indices, groupby \n
+    Possible kwargs for dictionary formatting: maxlength, nullstr, truncate, sort, sort_by, reverse, showonly, exclude, style (either inline or block)\n
     '''
     def __call__(self, value, **kwargs):
         '''Is called when user types in simply rprint(value)
@@ -13,11 +15,10 @@ class _RichPrint:
         :return: Prints the formatted output into the console.
         '''
         formatter = self._detect_formatter(value)
-        output = formatter(value, **kwargs)
-        print(output)
+        formatter(value, **kwargs)
     
     def __repr__(self):
-        return f"rprint(value, sort=True/False, startat=int, sort=True, showonly=instance)"
+        return f"rprint(value, kwargs)"
  
     def _detect_formatter(self, value):
         '''
@@ -28,7 +29,7 @@ class _RichPrint:
         '''
         if isinstance(value, (list, tuple)): return format_list
         if isinstance(value, dict): return format_dict
-        if isinstance(value, (str, int, bool, None)): return format_primitive
+        if isinstance(value, (str, int, float, bool, type(None))): return format_primitive
 
     def configure(self, **kwargs): pass
 
