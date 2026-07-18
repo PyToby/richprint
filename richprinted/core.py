@@ -1,4 +1,4 @@
-from richprint.formatters.formatter import format_list, format_dict, format_primitive
+from richprinted.formatters.formatter import format_list, format_dict, format_primitive
 
 
 class _RichPrint:

@@ -1,5 +1,5 @@
 [project]
-name = "richprint"
+name = "richprinted"
 version = "0.1.0"
 description = "Beautiful terminal output for Python objects"
 readme = "README.md"
