@@ -71,7 +71,8 @@ def format_list(value: list, **kwargs):
 
 def sort_fn(e):
     return str(type(e))
-    '''
+
+'''
 DICTIONARY FORMATTING
 '''
 def format_dict(value, **kwargs):
@@ -82,10 +83,23 @@ def format_dict(value, **kwargs):
     truncate: int = kwargs.get('truncate', None)
     sort: bool = kwargs.get('sort')
     sort_by: str = kwargs.get('sort_by')
-    keys: bool = kwargs.get('keys')
+    showonly: bool = kwargs.get('keys')
     exclude: bool = kwargs.get('exclude')
     flatten: bool = kwargs.get('flatten')
     sort: str = kwargs.get('sort')
+
+    if maxlength:
+        keys = list(value.keys())[:maxlength]
+        value = {k: value[k] for k in keys}
+    if truncate:
+        length = len(list(value.keys()))
+        new_length = length - truncate
+        keys = list(value.keys())[:new_length]
+        value = {k: value[k] for k in keys}
+    if nullstr:
+        value = {k: nullstr if value[k] == None else value[k] for k in keys}
+    
+    print(value)
 
 
 '''
@@ -135,4 +149,14 @@ if __name__ == '__main__':
     #format_list(test, groupby="type")
 
     text = "Welcome to the new dark ages, I hope you're living right."
-    format_primitive(text, prefix="Yum! ", suffix=" YUM!")
+    #format_primitive(text, prefix="Yum! ", suffix=" YUM!")
+    test = {
+        'nice': 5,
+        'v': 10,
+        's': None,
+        'f': 15,
+        'd': 58,
+        'p': 45,
+        'e': 14,
+    }
+    format_dict(test, truncate=3, nullstr="OO")
