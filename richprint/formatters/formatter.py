@@ -1,3 +1,5 @@
+import json
+
 TYPE_MAP = {
     "str": str,
     "int": int,
@@ -24,9 +26,7 @@ def format_list(value: list, **kwargs):
     maxlength: int = kwargs.get('maxlength', 50)
     groupby: str = kwargs.get('groupby', "type")
     
-    print("")
-    print(f"List/tuple: ")
-    print("")
+    print("\n({}):\n".format(type(value)))
     if sort:
         value = sorted(value, key=str)
     if showonly:
@@ -75,20 +75,26 @@ def sort_fn(e):
 '''
 DICTIONARY FORMATTING
 '''
-def format_dict(value, **kwargs):
-    maxlength: int = kwargs.get('maxlength', 50)
+def format_dict(value: dict, **kwargs):
+    maxlength: int = kwargs.get('maxlength', None)
     nullstr: str = kwargs.get('nullstr', None)
-    #encoding: str = kwargs.get('encoding', None)
-    #errors: str = kwargs.get('errors', None)
     truncate: int = kwargs.get('truncate', None)
     sort: bool = kwargs.get('sort')
     sort_by: str = kwargs.get('sort_by')
-    showonly: bool = kwargs.get('keys')
-    exclude: bool = kwargs.get('exclude')
-    flatten: bool = kwargs.get('flatten')
-    sort: str = kwargs.get('sort')
+    reverse: bool = kwargs.get('reverse', False)
+    showonly: list = kwargs.get('showonly')
+    exclude: list = kwargs.get('exclude')
+    style: str = kwargs.get('style', 'block')
 
-    if maxlength:
+    if showonly:
+        value = {k: v for k, v in value.items() if k in showonly}
+    if exclude:
+        value = {k: v for k, v in value.items() if k not in exclude}
+    if sort_by == 'values':
+        value = dict(sorted(value.items(), key=lambda item: str(item[1]), reverse=reverse))
+    elif sort_by == 'keys' or sort:
+        value = dict(sorted(value.items(), key=lambda item: str(item[0]), reverse=reverse))
+    if maxlength is not None:
         keys = list(value.keys())[:maxlength]
         value = {k: value[k] for k in keys}
     if truncate:
@@ -99,8 +105,17 @@ def format_dict(value, **kwargs):
     if nullstr:
         value = {k: nullstr if value[k] == None else value[k] for k in keys}
     
-    print(value)
-
+    print("\n({}):".format(type(value)))
+    if style == 'block':
+        output = json.dumps(value, indent=4, default=str)
+        output = output.replace('null', 'None').replace('true', 'True').replace('false', 'False')
+        print(output + '\n')
+    elif style == 'inline':
+        print(value)
+    else:
+        output = json.dumps(value, indent=4, default=str)
+        output = output.replace('null', 'None').replace('true', 'True').replace('false', 'False')
+        print(output + '\n')
 
 '''
 PRIMITIVE FORMATTING
@@ -136,27 +151,21 @@ def format_primitive(value, **kwargs):
     print('')
 
 '''
-TABLE FORMATTING
-'''
-def format_table(value, **kwargs):
-    pass
-
-'''
 TESTING
 '''
 if __name__ == '__main__':
     test = ['āaaaaaaaa', 'ęweeeeeeeeeee', 'žaaaaaaa', 'čw', 1, 2456543521321, None]
-    #format_list(test, groupby="type")
+    format_list(test, groupby="type")
 
     text = "Welcome to the new dark ages, I hope you're living right."
     #format_primitive(text, prefix="Yum! ", suffix=" YUM!")
     test = {
-        'nice': 5,
-        'v': 10,
-        's': None,
-        'f': 15,
-        'd': 58,
-        'p': 45,
-        'e': 14,
+        'b': 5,
+        'd': 10,
+        'c': None,
+        'a': 15,
+        'e': 58,
+        'g': 45,
+        'f': 14,
     }
-    format_dict(test, truncate=3, nullstr="OO")
+    format_dict(test)
