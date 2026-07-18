@@ -2,9 +2,26 @@
 name = "richprint"
 version = "0.1.0"
 description = "Beautiful terminal output for Python objects"
+readme = "README.md"
 authors = [{name = "Toby", email = "ucet1.random@gmail.com"}]
 requires-python = ">=3.10"
+license = "MIT"
 dependencies = []
+keywords = ["print", "terminal", "pretty-print", "cli", "formatting", "debugging"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Terminals",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Homepage = "https://github.com/PyToby/richprint"
+Repository = "https://github.com/PyToby/richprint"
 
 [build-system]
 requires = ["hatchling"]
