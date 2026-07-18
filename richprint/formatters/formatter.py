@@ -22,9 +22,11 @@ def format_list(value: list, **kwargs):
     errors: str = kwargs.get('errors', None)
     nullstr: str = kwargs.get('nullstr', None)
     show_indices: bool = kwargs.get('show_indices', True)
-    truncate: int = kwargs.get('truncate', 100)
-    maxlength: int = kwargs.get('maxlength', 50)
-    groupby: str = kwargs.get('groupby', "type")
+    truncate: int = kwargs.get('truncate')
+    maxlength: int = kwargs.get('maxlength')
+    groupby: str = kwargs.get('groupby', None)
+
+    excess = 0
     
     print("\n({}):\n".format(type(value)))
     if sort:
@@ -34,12 +36,11 @@ def format_list(value: list, **kwargs):
         if target_type is None:
             raise ValueError(f"Unknown type '{showonly}'. Valid options: {list(TYPE_MAP.keys())}")
         value = [item for item in value if isinstance(item, target_type)]
-    if groupby.lower() == "type":
-        value.sort(key=sort_fn)
-    if maxlength:
-        if maxlength < len(value):
-            excess = len(value) - maxlength
-            value = value[:maxlength]
+    if groupby and groupby.lower() == 'type':
+        value.sort(key=_sort_fn)
+    if maxlength and maxlength < len(value):
+        excess = len(value) - maxlength
+        value = value[:maxlength]
     if truncate:
         for index, item in enumerate(value):
             if len(str(item)) > truncate and item not in [True, False, None]:
@@ -51,7 +52,7 @@ def format_list(value: list, **kwargs):
         except LookupError:
             raise ValueError(f"Unknown encoding '{encoding}' or error '{errors}'. Please use an existing encoding.")
     if nullstr:
-        value = [nullstr if item == None else item for item in value]
+        value = [nullstr if item is None else item for item in value]
     
     if show_indices:
         for index, item in enumerate(value, start=startat):
@@ -69,7 +70,7 @@ def format_list(value: list, **kwargs):
 
     print("")
 
-def sort_fn(e):
+def _sort_fn(e):
     return str(type(e))
 
 '''
@@ -79,8 +80,8 @@ def format_dict(value: dict, **kwargs):
     maxlength: int = kwargs.get('maxlength', None)
     nullstr: str = kwargs.get('nullstr', None)
     truncate: int = kwargs.get('truncate', None)
-    sort: bool = kwargs.get('sort')
-    sort_by: str = kwargs.get('sort_by')
+    sort: bool = kwargs.get('sort', False)
+    sort_by: str = kwargs.get('sort_by', None)
     reverse: bool = kwargs.get('reverse', False)
     showonly: list = kwargs.get('showonly')
     exclude: list = kwargs.get('exclude')
@@ -98,12 +99,12 @@ def format_dict(value: dict, **kwargs):
         keys = list(value.keys())[:maxlength]
         value = {k: value[k] for k in keys}
     if truncate:
-        length = len(list(value.keys()))
-        new_length = length - truncate
-        keys = list(value.keys())[:new_length]
-        value = {k: value[k] for k in keys}
+        value = {
+            k: str(v)[:truncate] + '...' if isinstance(v, str) and len(v) > truncate else v
+            for k, v in value.items()
+        }
     if nullstr:
-        value = {k: nullstr if value[k] == None else value[k] for k in keys}
+        value = {k: nullstr if v is None else v for k, v in value.items()}
     
     print("\n({}):".format(type(value)))
     if style == 'block':
@@ -128,7 +129,7 @@ def format_primitive(value, **kwargs):
     prefix: str = kwargs.get('prefix')
     suffix: str = kwargs.get('suffix')
 
-    if nullstr and value == None:
+    if nullstr and value is None:
         value = nullstr
     if encoding:
         try:
@@ -141,9 +142,9 @@ def format_primitive(value, **kwargs):
         if len(str(value)) > truncate and type(value) != bool and value != None:
             value = value[:truncate] + "..."
     if prefix:
-        value = prefix + value
+        value = prefix + str(value)
     if suffix:
-        value = value + suffix
+        value = str(value) + suffix
         
 
     print('')
