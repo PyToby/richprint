@@ -11,10 +11,15 @@ TYPE_MAP = {
 
 ALLOWED_ENCODING_ERRORS = ['backslashreplace', 'ignore', 'namereplace', 'strict', 'replace', 'xmlcharrefreplace']
 
-'''
-LIST/TUPLE FORMATTING
-'''
+### ------------ FUNCS ------------ ###
+
 def format_list(value: list, **kwargs):
+    '''
+    LIST/TUPLE FORMATTING
+
+    :param value:
+    :return: A formatted list or tuple
+    '''
     startat: int = kwargs.get('startat', 0)
     sort: bool = kwargs.get('sort', None)
     showonly: str = kwargs.get('showonly', None)
@@ -73,10 +78,14 @@ def format_list(value: list, **kwargs):
 def _sort_fn(e):
     return str(type(e))
 
-'''
-DICTIONARY FORMATTING
-'''
+
 def format_dict(value: dict, **kwargs):
+    '''
+    DICTIONARY FORMATTING
+
+    :param value:
+    :return: A formatted dictionary
+    '''
     maxlength: int = kwargs.get('maxlength', None)
     nullstr: str = kwargs.get('nullstr', None)
     truncate: int = kwargs.get('truncate', None)
@@ -118,10 +127,14 @@ def format_dict(value: dict, **kwargs):
         output = output.replace('null', 'None').replace('true', 'True').replace('false', 'False')
         print(output + '\n')
 
-'''
-PRIMITIVE FORMATTING
-'''
+
 def format_primitive(value, **kwargs):
+    '''
+    PRIMITIVE FORMATTING
+
+    :param value:
+    :return: A formatted primitive
+    '''
     nullstr: str = kwargs.get('nullstr', None)
     encoding: str = kwargs.get('encoding', None)
     errors: str = kwargs.get('errors', None)
@@ -150,23 +163,3 @@ def format_primitive(value, **kwargs):
     print('')
     print("({}): {}".format(type(value), value))
     print('')
-
-'''
-TESTING
-'''
-if __name__ == '__main__':
-    test = ['āaaaaaaaa', 'ęweeeeeeeeeee', 'žaaaaaaa', 'čw', 1, 2456543521321, None]
-    format_list(test, groupby="type")
-
-    text = "Welcome to the new dark ages, I hope you're living right."
-    #format_primitive(text, prefix="Yum! ", suffix=" YUM!")
-    test = {
-        'b': 5,
-        'd': 10,
-        'c': None,
-        'a': 15,
-        'e': 58,
-        'g': 45,
-        'f': 14,
-    }
-    format_dict(test)
