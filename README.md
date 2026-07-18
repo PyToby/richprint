@@ -77,14 +77,13 @@ rprint(list(range(20)), maxlength=10)
 | `sorting`      | Sort the list before display                                |
 | `encoding`     | Encoding to apply/validate against for string items         |
 | `showonly`     | Restrict display to only specific items                     |
-| `switch_rows`  | Swap row/column display orientation                          |
 | `startat`      | Index to start numbering from (0 or 1 indexing)              |
 | `errors`       | Error handling mode for encoding issues                      |
 | `nullstr`      | Custom string to represent `None` values                    |
 | `truncate`     | Truncate long individual items                               |
 | `maxlength`    | Truncate output after N items, showing `... (X more)`        |
 | `show_indices` | Display each item's index alongside its value                |
-| `groupby`      | Group items using a key function before display              |
+| `groupby`      | Group items by their type                                    |
 
 ### Formatting dictionaries
 
@@ -102,11 +101,11 @@ rprint(
 | `nullstr`   | Custom string to represent `None` values                    |
 | `truncate`  | Truncate long values                                          |
 | `sort`      | Sort entries by key                                           |
-| `sort_by`   | Sort entries using a custom function                          |
-| `reverse`   | Reverse display order                                         |
+| `sort_by`   | Sort entries either by values or keys                          |
+| `reverse`   | Reverse display order, used with sort                         |
 | `showonly`  | Restrict display to only specific keys                        |
 | `exclude`   | Blocklist specific keys from display                           |
-| `style`     | Output format — either `"inline"` or `"block"`                |
+| `style`     | Output format - either `"inline"` or `"block"`                |
 
 ### Utility methods
 
