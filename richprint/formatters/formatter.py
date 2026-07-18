@@ -153,7 +153,7 @@ def format_primitive(value, **kwargs):
             raise ValueError(f"Could not encode value with encoding '{encoding}': {e}")
     if truncate:
         if len(str(value)) > truncate and type(value) != bool and value != None:
-            value = value[:truncate] + "..."
+            value = str(value)[:truncate] + "..."
     if prefix:
         value = prefix + str(value)
     if suffix:
