@@ -1,7 +1,7 @@
 from richprinted.formatters.formatter import format_list, format_dict, format_primitive
 
 
-class _RichPrint:
+class _RichPrinted:
     '''
     Class that handles execution and detection of values and formatted values.\n
     
@@ -35,4 +35,4 @@ class _RichPrint:
 
 
 
-rprint = _RichPrint()
+rprint = _RichPrinted()
